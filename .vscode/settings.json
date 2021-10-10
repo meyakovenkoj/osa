@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.gpss": "gpss",
+        "errno.h": "c",
+        "logerr.h": "c",
+        "types.h": "c"
+},
+    "editor.tabSize": 8
+}
