@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "logerr.h"
 
 #define BUF_SIZE 10
 
@@ -22,8 +23,11 @@ char *readstring(size_t *size, int multiline, int fd)
     size_t current_size = 0;
     char buffer[BUF_SIZE];
     read_size = read(fd, buffer, BUF_SIZE - 1);
+    if (read_size < 0){
+	LOG_ERR("read fail");
+	return NULL;
+    }
     buffer[read_size] = '\0';
-    // read_size = strnlen(buffer, BUF_SIZE);
     while (read_size > 0) {
 	tmp = (char *)malloc(current_size + read_size + 1);
 	if (tmp == NULL) {
@@ -43,7 +47,6 @@ char *readstring(size_t *size, int multiline, int fd)
 	buf[current_size] = '\0';
 	memset(buffer, '\0', BUF_SIZE);
 	read_size = read(fd, buffer, BUF_SIZE - 1);
-	// read_size = strnlen(buffer, BUF_SIZE);
     }
     if (size) {
 	*size = current_size;

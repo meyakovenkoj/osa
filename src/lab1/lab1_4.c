@@ -47,7 +47,7 @@ int main()
 	switch (rmode) {
 	case 1:
 	    printf("Enter offset:\n");
-	    scanf("%lld", &offset);
+	    scanf("%ld", &offset);
 	    lseek(fd, offset, SEEK_SET);
 	    break;
 	case 2:

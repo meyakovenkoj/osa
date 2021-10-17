@@ -31,11 +31,11 @@ int main(int argc, char **argv)
     off_t end2 = lseek(output_fd, 0, SEEK_END);
 
     if (end1 > end2) {
-	printf("%s is bigger. size=%lld bytes\n", argv[1], end1);
+	printf("%s is bigger. size=%ld bytes\n", argv[1], end1);
     } else if (end2 > end1) {
-	printf("%s is bigger. size=%lld bytes\n", argv[2], end2);
+	printf("%s is bigger. size=%ld bytes\n", argv[2], end2);
     } else {
-	printf("They are equal. size=%lld bytes\n", end1);
+	printf("They are equal. size=%ld bytes\n", end1);
     }
     if (close(input_fd)) {
 	LOG_ERR("close() error");
