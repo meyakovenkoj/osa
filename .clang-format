@@ -2,7 +2,7 @@ Standard: Cpp11
 BasedOnStyle: LLVM
 IndentWidth: 4
 TabWidth: 8
-UseTab: Always
+UseTab: Never
 ColumnLimit: 0
 AccessModifierOffset: -4
 NamespaceIndentation: All

@@ -1,11 +1,11 @@
 #ifndef READSTRING_H
 #define READSTRING_H
+#include "logerr.h"
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "logerr.h"
 
 #define BUF_SIZE 10
 
@@ -23,33 +23,33 @@ char *readstring(size_t *size, int multiline, int fd)
     size_t current_size = 0;
     char buffer[BUF_SIZE];
     read_size = read(fd, buffer, BUF_SIZE - 1);
-    if (read_size < 0){
-	LOG_ERR("read fail");
-	return NULL;
+    if (read_size < 0) {
+        LOG_ERR("read fail");
+        return NULL;
     }
     buffer[read_size] = '\0';
     while (read_size > 0) {
-	tmp = (char *)malloc(current_size + read_size + 1);
-	if (tmp == NULL) {
-	    return NULL;
-	}
-	memcpy(tmp, buf, current_size);
-	free(buf);
-	buf = tmp;
-	if (multiline && buffer[read_size - 1] == '\n') {
-	    memcpy(buf + current_size, buffer, read_size - 1);
-	    current_size += read_size - 1;
-	    buf[current_size] = '\0';
-	    break;
-	}
-	memcpy(buf + current_size, buffer, read_size);
-	current_size += read_size;
-	buf[current_size] = '\0';
-	memset(buffer, '\0', BUF_SIZE);
-	read_size = read(fd, buffer, BUF_SIZE - 1);
+        tmp = (char *)malloc(current_size + read_size + 1);
+        if (tmp == NULL) {
+            return NULL;
+        }
+        memcpy(tmp, buf, current_size);
+        free(buf);
+        buf = tmp;
+        if (multiline && buffer[read_size - 1] == '\n') {
+            memcpy(buf + current_size, buffer, read_size - 1);
+            current_size += read_size - 1;
+            buf[current_size] = '\0';
+            break;
+        }
+        memcpy(buf + current_size, buffer, read_size);
+        current_size += read_size;
+        buf[current_size] = '\0';
+        memset(buffer, '\0', BUF_SIZE);
+        read_size = read(fd, buffer, BUF_SIZE - 1);
     }
     if (size) {
-	*size = current_size;
+        *size = current_size;
     }
     return buf;
 }

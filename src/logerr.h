@@ -12,7 +12,7 @@ void log_err(const char *message, const char *file, int line, int err)
 {
     printf("[%s:%d]: ", file, line);
     if (message) {
-	printf("%s ", message);
+        printf("%s ", message);
     }
     printf("(errno=%d, %s)\n", err, sys_errlist[err]);
 }

@@ -13,42 +13,42 @@ int main(int argc, char **argv)
     int output_fd = STDOUT_FILENO;
     if (argc == 1) {
     } else if (argc == 3) {
-	input_fd = open(argv[1], O_RDONLY);
-	if (input_fd < 0) {
-	    LOG_ERR("open input error");
-	    exit(errno);
-	}
-	struct stat info = {0};
-	if (stat(argv[1], &info)) {
-	    LOG_ERR("stat error");
-	}
+        input_fd = open(argv[1], O_RDONLY);
+        if (input_fd < 0) {
+            LOG_ERR("open input error");
+            exit(errno);
+        }
+        struct stat info = {0};
+        if (stat(argv[1], &info)) {
+            LOG_ERR("stat error");
+        }
 
-	output_fd = open(argv[2], O_CREAT | O_WRONLY, info.st_mode);
-	if (output_fd < 0) {
-	    LOG_ERR("open output error");
-	    exit(errno);
-	}
+        output_fd = open(argv[2], O_CREAT | O_WRONLY, info.st_mode);
+        if (output_fd < 0) {
+            LOG_ERR("open output error");
+            exit(errno);
+        }
     } else {
-	printf("File copy\nUsage program file1 file2\nIf there are no args we use "
-	       "stdin and stdout\n");
-	exit(1);
+        printf("File copy\nUsage program file1 file2\nIf there are no args we use "
+               "stdin and stdout\n");
+        exit(1);
     }
     size_t cData;
     char *pData = readstring(&cData, 0, input_fd);
     if (!pData) {
-	LOG_ERR("Error file read");
-	exit(errno);
+        LOG_ERR("Error file read");
+        exit(errno);
     }
     if (write(output_fd, pData, cData) == -1) {
-	LOG_ERR("write() error");
+        LOG_ERR("write() error");
     }
 
     if (close(input_fd)) {
-	LOG_ERR("close() error");
+        LOG_ERR("close() error");
     }
 
     if (close(output_fd)) {
-	LOG_ERR("close() error");
+        LOG_ERR("close() error");
     }
     free(pData);
 

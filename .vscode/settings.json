@@ -5,5 +5,5 @@
         "logerr.h": "c",
         "types.h": "c"
 },
-    "editor.tabSize": 8
+    "editor.useTabStops": false
 }
