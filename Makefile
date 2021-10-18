@@ -6,6 +6,10 @@ CFLAGS := -g -std=c99 -O0 -Wall -Werror -Wpedantic -Wno-deprecated-declarations
 LDFLAGS := -I$(SRC_DIR)/
 CC := gcc
 
+all: lab2
+	mkdir -p $(TOP_DIR)/out
+	for file in $(SRC_FILES); do $(CC) $(CFLAGS) $(LDFLAGS) $$file -o $(TOP_DIR)/out/`basename $$file .c`; done
+
 clean:
 	rm -r $(TOP_DIR)/out
 
@@ -26,6 +30,3 @@ lab2:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab2/lab2_10_1.c -o $(TOP_DIR)/out/lab2_10_1
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab2/lab2_11.c -o $(TOP_DIR)/out/lab2_11
 
-all:
-	mkdir -p $(TOP_DIR)/out
-	for file in $(SRC_FILES); do $(CC) $(CFLAGS) $(LDFLAGS) $$file -o $(TOP_DIR)/out/`basename $$file .c`; done
