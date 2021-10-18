@@ -43,11 +43,15 @@ int main()
     }
     while (rmode > 0 && rmode < 4) {
         printf("Enter mode of editing: (0 - done, 1 - lseek, 2 - write, 3 - read)\n");
-        scanf("%d", &rmode);
+        char *md = readline(NULL);
+        rmode = atoi(md);
+        free(md);
         switch (rmode) {
         case 1:
             printf("Enter offset:\n");
-            scanf("%ld", &offset);
+            char *off = readline(NULL);
+            offset = atoll(off);
+            free(off);
             lseek(fd, offset, SEEK_SET);
             break;
         case 2:
