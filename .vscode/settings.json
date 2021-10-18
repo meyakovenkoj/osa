@@ -3,7 +3,9 @@
         "*.gpss": "gpss",
         "errno.h": "c",
         "logerr.h": "c",
-        "types.h": "c"
-},
+        "types.h": "c",
+        "readstring.h": "c",
+        "locale": "c"
+    },
     "editor.useTabStops": false
 }
