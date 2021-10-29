@@ -20,7 +20,7 @@ int main()
         exit(errno);
     case 0:
         printf("Child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
-        sleep(1);
+        //sleep(1);
         pause();
         printf("Child process finished\n");
         exit(0);

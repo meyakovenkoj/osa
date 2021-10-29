@@ -20,12 +20,12 @@ int main()
         exit(errno);
     case 0:
         printf("Child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
-        sleep(1);
+        //sleep(1);
         printf("Child process finished\n");
         exit(0);
     default:
         printf("Parent\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
-        sleep(5);
+        sleep(15);
         printf("Parent process finished\n");
         exit(0);
     }
