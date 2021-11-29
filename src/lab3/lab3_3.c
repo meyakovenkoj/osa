@@ -20,11 +20,10 @@ void action(int sig)
 int main()
 {
     struct sigaction act;
-    act.sa_handler = action;
+    act.sa_handler = SIG_IGN; //action;
     sigemptyset(&act.sa_mask);
     act.sa_flags = SA_NODEFER; // no blocks
     sigaction(SIGCHLD, &act, 0);
-
     int i;
     for (i = 0; i < 10; i++) {
         if (fork() == 0) {

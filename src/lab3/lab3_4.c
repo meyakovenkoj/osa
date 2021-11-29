@@ -23,7 +23,7 @@ int main()
                 }
             }
         }
-        exit(0);
+        exit(9);
     }
     default: {
         while (1) {

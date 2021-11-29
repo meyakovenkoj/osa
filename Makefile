@@ -6,7 +6,7 @@ CFLAGS := -g -std=gnu99 -O0 -Wall -Werror -Wpedantic -Wno-deprecated-declaration
 LDFLAGS := -I$(SRC_DIR)/
 CC := gcc
 
-all: lab2 lab3
+all: lab2 lab3 lab4
 	mkdir -p $(TOP_DIR)/out
 	for file in $(SRC_FILES); do $(CC) $(CFLAGS) $(LDFLAGS) $$file -o $(TOP_DIR)/out/`basename $$file .c`; done
 
@@ -47,4 +47,19 @@ lab3:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab3/lab3_10.c -o $(TOP_DIR)/out/lab3_10
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab3/lab3_11.c -o $(TOP_DIR)/out/lab3_11
 
+lab4:
+	mkdir -p $(TOP_DIR)/out
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_1.c -o $(TOP_DIR)/out/lab4_1
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_2.c -o $(TOP_DIR)/out/lab4_2
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_3.c -o $(TOP_DIR)/out/lab4_3
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_4.c -o $(TOP_DIR)/out/lab4_4
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_4e.c -o $(TOP_DIR)/out/lab4_4e
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_5.c -o $(TOP_DIR)/out/lab4_5
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_6.c -o $(TOP_DIR)/out/lab4_6
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_6e.c -o $(TOP_DIR)/out/lab4_6e
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_7.c -o $(TOP_DIR)/out/lab4_7
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_8.c -o $(TOP_DIR)/out/lab4_8
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_9.c -o $(TOP_DIR)/out/lab4_9
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_10.c -o $(TOP_DIR)/out/lab4_10
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab4/lab4_11.c -o $(TOP_DIR)/out/lab4_11
 
