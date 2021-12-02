@@ -11,7 +11,8 @@
 int main(int argc, char *argv[])
 {
     int pid, wfd, rfd, rb, wb, i = 0;
-    char str[] = "123456789";
+    char str[] = "111111111";
+    char str2[] = "222222222";
     struct flock lock;
 
     if (argc != 2) {
@@ -57,7 +58,8 @@ int main(int argc, char *argv[])
         }
 
         while (i++ < 100) {
-            if ((wb = write(wfd, str, sizeof(str))) < 0) {
+            char *cur = i % 2 ? str : str2;
+            if ((wb = write(wfd, cur, strlen(cur))) < 0) {
                 LOG_ERR("Write error");
                 kill(pid, SIGKILL);
                 exit(1);
