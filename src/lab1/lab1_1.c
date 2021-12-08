@@ -2,7 +2,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-extern const char *const sys_errlist[];
+//extern const char *const sys_errlist[];
 
 int main()
 {
@@ -11,7 +11,7 @@ int main()
         printf("Failed to open file\n");
     }
     printf("errno value is %d\n", errno);
-    printf("sys_errlist[errno] = %s\n", sys_errlist[errno]);
+    //printf("sys_errlist[errno] = %s\n", sys_errlist[errno]);
     perror("perror - open() error");
     return 0;
 }
