@@ -22,10 +22,10 @@ int main()
         printf("Child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
         sleep(1);
         printf("Child process finished\n");
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         printf("Parent\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
         printf("Parent process finished\n");
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }

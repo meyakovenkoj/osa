@@ -26,12 +26,12 @@ int main(int argc, char *argv[])
         char *buf = readmsg(msgqid, 1);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         if (sendmsg("server answers", msgqid, msgqid, 2)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         printf("Answered to %d\n", msgqid);
         free(buf);

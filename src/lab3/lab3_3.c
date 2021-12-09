@@ -29,7 +29,7 @@ int main()
         if (fork() == 0) {
             printf("child %d\n", getpid());
             sleep(5);
-            exit(1);
+            exit(EXIT_FAILURE);
         }
     }
 

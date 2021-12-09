@@ -21,7 +21,7 @@ int main()
         exit(errno);
     case 0:
         printf("Child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         printf("Parent\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
         child_pid = wait(&status);
@@ -30,6 +30,6 @@ int main()
             printf("Child exited with code %d\n", WEXITSTATUS(status));
         else
             printf("Child was terminated\n");
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }

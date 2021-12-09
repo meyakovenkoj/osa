@@ -46,7 +46,7 @@ int main(void)
 
     switch ((pid = fork())) {
     case -1: {
-        exit(1);
+        exit(EXIT_FAILURE);
         perror("Fork failed");
     }
     case 0: {
@@ -60,7 +60,7 @@ int main(void)
             sigsuspend(&mask);
         }
 
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     default: {
         sigdelset(&mask, SIGUSR1); //release lock on SIGUSR1
@@ -72,7 +72,7 @@ int main(void)
         }
 
         wait(NULL);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     }
 }

@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     } else {
         printf("File copy\nUsage program file1 file2\nIf there are no args we use "
                "stdin and stdout\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     size_t cData;
     char *pData = readstring(&cData, 0, input_fd);

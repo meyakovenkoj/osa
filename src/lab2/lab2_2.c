@@ -28,10 +28,10 @@ int main()
     case 0:
         cur_pid = getpid();
         printf("Child with pid %d\n", cur_pid);
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         cur_pid = getpid();
         printf("Parent with pid %d\n", cur_pid);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }

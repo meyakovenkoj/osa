@@ -20,14 +20,14 @@ int main(int argc, char *argv[])
     char parent_buf[256];
     if (argc != 2) {
         printf("Usage ./out/lab2_8 <filename>\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     pid = fork();
     switch (pid) {
     case -1:
         LOG_ERR("fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     case 0:
         fd = open(argv[1], O_RDONLY);
         printf("child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         close(fd_child);
 #endif
         close(fd);
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         fd = open(argv[1], O_RDONLY);
         printf("PARENT\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));

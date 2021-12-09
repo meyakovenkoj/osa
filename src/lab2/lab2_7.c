@@ -26,11 +26,11 @@ int main()
         printf("Child\t%d\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()), spgrp);
         pause();
         printf("Child process finished\n");
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         printf("Parent\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
         pause(); //comment for finish parent
         printf("Parent process finished\n");
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }

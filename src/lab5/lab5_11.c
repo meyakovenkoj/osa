@@ -26,14 +26,14 @@ int main()
             char *buf = readmsg(msgqid, 1);
             if (!buf) {
                 LOG_ERR("readmsg failed");
-                exit(1);
+                exit(EXIT_FAILURE);
             }
 
             write(STDOUT_FILENO, "0", sizeof("0"));
 
             if (sendmsg("child", msgqid, msgqid, 2)) {
                 LOG_ERR("sendmsg failed");
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             free(buf);
             sleep(1);
@@ -44,7 +44,7 @@ int main()
         for (;;) {
             if (sendmsg("parent", msgqid, msgqid, 1)) {
                 LOG_ERR("sendmsg failed");
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             sleep(1);
 
@@ -53,7 +53,7 @@ int main()
             char *buf = readmsg(msgqid, 2);
             if (!buf) {
                 LOG_ERR("readmsg failed");
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             free(buf);
         }

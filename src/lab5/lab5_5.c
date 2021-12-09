@@ -14,13 +14,13 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &msgqid);
     if (err) {
         LOG_ERR("bad msgqid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     int res_cnlt = msgctl(msgqid, IPC_RMID, 0);
     if (res_cnlt == -1) {
         LOG_ERR("removing of queue failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     return 0;
 }

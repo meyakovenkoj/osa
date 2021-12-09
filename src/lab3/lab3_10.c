@@ -43,12 +43,12 @@ int main(void)
     switch (pid = fork()) {
     case -1: {
         perror("Fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     case 0: {
         printf("child process %d\n", getpid());
         sleep(1);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     default: {
         printf("PARENT process %d\nignore Ctrl+C\n", getpid());
@@ -57,7 +57,7 @@ int main(void)
         wait(&status);
         printf("Status: %x\n", status);
         sigaction(SIGCHLD, &oldact, NULL);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     }
 }

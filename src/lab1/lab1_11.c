@@ -25,7 +25,7 @@ int main(int argc, char **argv)
         }
     } else {
         printf("File copy\nUsage program file1 file2\nIf there are no args we use stdin and stdout\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     off_t end1 = lseek(input_fd, 0, SEEK_END);
     off_t end2 = lseek(output_fd, 0, SEEK_END);

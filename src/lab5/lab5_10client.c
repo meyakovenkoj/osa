@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &msgqid);
     if (err) {
         LOG_ERR("bad msgqid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     printf(">>>> msgqid is %d <<<<\n", msgqid);
@@ -23,12 +23,12 @@ int main(int argc, char *argv[])
     for (;;) {
         if (sendmsg("Client asks", msgqid, msgqid, 1)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         char *buf = readmsg(msgqid, 2);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         printf("Server send: '%s'\n", ((struct servermsg *)buf)->mtext);

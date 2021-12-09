@@ -58,7 +58,7 @@ int main(int argc, char **argv)
         dup2(output_fd, STDOUT_FILENO);
     } else {
         printf("File copy\nUsage program file1 file2\nIf there are no args we use stdin and stdout\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     copy();
     if (close(input_fd)) {

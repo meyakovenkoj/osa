@@ -16,17 +16,17 @@ int main(int argc, char *argv[], char *envp[])
 
     if (argc != 2) {
         printf("Usage ./out/lab2_10 <path/to/program>\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     pid = fork();
     switch (pid) {
     case -1:
         LOG_ERR("fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     case 0:
         execle(argv[1], "l1", "l2", "l3", NULL, env);
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         printf("Number of args: %d\n", argc);
         printf("Arguments:\n");

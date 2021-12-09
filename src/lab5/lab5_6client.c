@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &serverid);
     if (err) {
         LOG_ERR("bad serverid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     int msgqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
     for (;;) {
         if (sendmsg("Client asks", serverid, msgqid, 0)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         char *buf = readmsg(msgqid, 0);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         printf("Server send: '%s'\n", ((struct servermsg *)buf)->mtext);

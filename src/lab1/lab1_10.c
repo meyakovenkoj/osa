@@ -9,7 +9,7 @@ int main(int argc, char **argv)
 {
     if (argc != 2) {
         printf("Usage: program <file>\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     int fd = open(argv[1], O_RDONLY);
     if (fd < 0) {

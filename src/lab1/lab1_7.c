@@ -12,13 +12,13 @@ int main(int argc, char **argv)
     struct stat info = {0};
     if (argc != 2) {
         printf("Usage: program <file>\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (stat(argv[1], &info)) {
         LOG_ERR("stat error");
     }
-printf("Mode:%jo\n",(uintmax_t)info.st_mode);
+    printf("Mode:%jo\n", (uintmax_t)info.st_mode);
     if (S_ISREG(info.st_mode)) {
         printf("regular file\n");
     }

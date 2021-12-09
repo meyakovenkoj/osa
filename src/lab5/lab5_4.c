@@ -23,17 +23,17 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &msgqid);
     if (err) {
         LOG_ERR("bad msgqid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     err = str2long(argv[2], &type);
     if (err) {
         LOG_ERR("bad type specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     if (msgqid < 0) {
         LOG_ERR("bad msgqid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     char *buf = calloc(4 + MAX_SZ, sizeof(char));
     int buflen = MAX_SZ;

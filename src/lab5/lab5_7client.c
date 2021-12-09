@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &serverid);
     if (err) {
         LOG_ERR("bad serverid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     msgqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
@@ -54,52 +54,52 @@ int main(int argc, char *argv[])
         char *rmsgqidstr = readline(NULL);
         if (!rmsgqidstr) {
             LOG_ERR("readline failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         int rmsgqid;
         err = str2int(rmsgqidstr, &rmsgqid);
         if (err) {
             LOG_ERR("bad reciever queue id specified");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         printf("enter reciever type\n");
         char *rtypestr = readline(NULL);
         if (!rtypestr) {
             LOG_ERR("readline failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         long rtype;
         err = str2long(rtypestr, &rtype);
         if (err) {
             LOG_ERR("bad type specified");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         printf("enter sender type\n");
         char *stypestr = readline(NULL);
         if (!stypestr) {
             LOG_ERR("readline failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         long stype;
         err = str2long(stypestr, &stype);
         if (err) {
             LOG_ERR("bad type specified");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         printf("enter text\n");
         char *text = readline(NULL);
         if (!text) {
             LOG_ERR("readline failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         if (sendmsg(text, serverid, rmsgqid, stype)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         char *buf = readmsg(msgqid, rtype);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         printf("S: '%s'\n", ((struct servermsg *)buf)->mtext);

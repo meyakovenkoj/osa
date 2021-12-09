@@ -17,13 +17,13 @@ int main(int argc, char *argv[])
 
     if (argc != 2) {
         LOG_ERR("bad args");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     switch (pid = fork()) {
     case -1:
         LOG_ERR("Fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     case 0:
         lock1.l_type = F_RDLCK;
         lock1.l_whence = SEEK_SET;
@@ -31,12 +31,12 @@ int main(int argc, char *argv[])
         lock1.l_len = 0;
         if ((rfd = open(argv[1], O_RDONLY | O_CREAT, 0777)) < 0) {
             LOG_ERR("File opening failed rfd\n");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         if (fcntl(rfd, F_SETLKW, &lock1) == -1) {
             LOG_ERR("FCNTL failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         char buf1[10];
@@ -46,13 +46,13 @@ int main(int argc, char *argv[])
             if (rb == -1) {
                 LOG_ERR("Read error");
                 kill(getppid(), SIGKILL);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
             write(1, buf1, rb);
         }
 
         close(rfd);
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         lock.l_type = F_WRLCK;
         lock.l_whence = SEEK_SET;
@@ -60,11 +60,11 @@ int main(int argc, char *argv[])
         lock.l_len = 0;
         if ((wfd = open(argv[1], O_WRONLY | O_CREAT, 0777)) < 0) {
             LOG_ERR("File opening failed wfd");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         if (fcntl(wfd, F_SETLK, &lock) == -1) {
             LOG_ERR("FCNTL failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         while (i++ < 100) {
@@ -72,11 +72,11 @@ int main(int argc, char *argv[])
             if ((wb = write(wfd, cur, strlen(cur))) < 0) {
                 LOG_ERR("Write error");
                 kill(pid, SIGKILL);
-                exit(1);
+                exit(EXIT_FAILURE);
             }
         }
         close(wfd);
         wait(NULL);
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
 }

@@ -19,7 +19,7 @@ int main()
     switch (pid = fork()) {
     case -1: {
         perror("Fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
     case 0: {
 #ifdef WITHSIG
@@ -34,7 +34,7 @@ int main()
                 }
             }
         }
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     default: {
         printf("PARENT process %d\n", getpid());
@@ -45,7 +45,7 @@ int main()
                 break;
             }
         }
-        exit(0);
+        exit(EXIT_SUCCESS);
     }
     }
 }

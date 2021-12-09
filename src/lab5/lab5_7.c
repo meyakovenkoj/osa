@@ -26,14 +26,14 @@ int main(int argc, char *argv[])
         char *buf = readmsg(msgqid, 0);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         int answerid = ((struct servermsg *)buf)->msgqid;
         long type = ((struct servermsg *)buf)->mtype;
         if (sendmsg(((struct servermsg *)buf)->mtext, answerid, msgqid, type)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         printf("Answered to %d\n", answerid);
         free(buf);

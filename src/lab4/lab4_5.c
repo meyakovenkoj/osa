@@ -11,13 +11,13 @@ int main()
     //     char buf[512] = "\0";
     if (pipe(fp) != 0) {
         LOG_ERR("Failed to open pipe 1");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     switch (fork()) {
     case -1:
         perror("Fork failed");
-        exit(1);
+        exit(EXIT_FAILURE);
     case 0:
         close(fp[0]);
         printf("Child process %d\n", getpid());

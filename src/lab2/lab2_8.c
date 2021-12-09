@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     char parent_buf[256];
     if (argc != 2) {
         printf("Usage ./out/lab2_8 <filename>\n");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     fd = open(argv[1], O_RDONLY);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     switch (pid) {
     case -1:
         LOG_ERR("fork failed");
-        exit(1); //выход из родительского процесса
+        exit(EXIT_FAILURE); //выход из родительского процесса
     case 0:
         printf("child\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
 #ifdef MODE
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 #ifdef MODE
         close(fd_child);
 #endif
-        exit(0);
+        exit(EXIT_SUCCESS);
     default:
         printf("PARENT\t%d\t%d\t%d\n", getpid(), getppid(), getpgid(getpid()));
 #ifdef MODE

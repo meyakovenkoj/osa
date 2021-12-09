@@ -15,13 +15,13 @@ int main(int argc, char *argv[])
     err = str2int(argv[1], &requestid);
     if (err) {
         LOG_ERR("bad requestid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     err = str2int(argv[2], &answerid);
     if (err) {
         LOG_ERR("bad answerid specified");
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 
     printf(">>>> requestid is %d <<<<\n", requestid);
@@ -30,12 +30,12 @@ int main(int argc, char *argv[])
     for (;;) {
         if (sendmsg("Client asks", requestid, answerid, 0)) {
             LOG_ERR("sendmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
         char *buf = readmsg(answerid, 0);
         if (!buf) {
             LOG_ERR("readmsg failed");
-            exit(1);
+            exit(EXIT_FAILURE);
         }
 
         printf("Server send: '%s'\n", ((struct servermsg *)buf)->mtext);

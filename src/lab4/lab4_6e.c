@@ -7,17 +7,18 @@
 
 #define FIFO "fifo_file"
 
-int main() {
-  int wfd; //, n;
-  char buf[15] = "Hello, world\n";
+int main()
+{
+    int wfd; //, n;
+    char buf[15] = "Hello, world\n";
 
-  if ((wfd = open(FIFO, O_WRONLY)) < 0) {
-    printf("FIFO opening failed\n");
-    exit(1);
-  }
-  write(wfd, buf, sizeof(buf));
+    if ((wfd = open(FIFO, O_WRONLY)) < 0) {
+        printf("FIFO opening failed\n");
+        exit(EXIT_FAILURE);
+    }
+    write(wfd, buf, sizeof(buf));
 
-  close(wfd);
-  unlink(FIFO);
-  exit(0);
+    close(wfd);
+    unlink(FIFO);
+    exit(EXIT_SUCCESS);
 }
