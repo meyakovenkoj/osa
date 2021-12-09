@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     if (stat(argv[1], &info)) {
         LOG_ERR("stat error");
     }
-    printf("Mode:%jo\n", (uintmax_t)info.st_mode);
+    printf("Mode:%ho\n", (uint16_t)info.st_mode);
     if (S_ISREG(info.st_mode)) {
         printf("regular file\n");
     }
