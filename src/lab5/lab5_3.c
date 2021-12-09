@@ -7,6 +7,12 @@
 #include <sys/msg.h>
 #include <time.h>
 
+struct mmsg
+{
+    long mtype;    /* message type (+ve integer) */
+    char mtext[1]; /* message body */
+};
+
 int main(int argc, char *argv[])
 {
     int msgqid;
@@ -47,7 +53,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    printf("%s\n", ((struct mymsg *)buf)->mtext);
+    printf("%s\n", ((struct mmsg *)buf)->mtext);
     free(buf);
     return 0;
 }
