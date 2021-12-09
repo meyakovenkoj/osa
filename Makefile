@@ -6,12 +6,22 @@ CFLAGS := -g -std=gnu99 -O0 -Wall -Werror -Wpedantic -Wno-deprecated-declaration
 LDFLAGS := -I$(SRC_DIR)/
 CC := gcc
 
-all: lab2 lab3 lab4 lab5
-	mkdir -p $(TOP_DIR)/out
-	for file in $(SRC_FILES); do $(CC) $(CFLAGS) $(LDFLAGS) $$file -o $(TOP_DIR)/out/`basename $$file .c`; done
+all: clean lab1 lab2 lab3 lab4 lab5
+	echo "All done"
 
 clean:
-	rm -r $(TOP_DIR)/out
+	rm -rf $(TOP_DIR)/out
+
+lab1:
+	mkdir -p $(TOP_DIR)/out
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_1.c -o $(TOP_DIR)/out/lab1_1
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_2.c -o $(TOP_DIR)/out/lab1_2
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_4.c -o $(TOP_DIR)/out/lab1_4
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_7.c -o $(TOP_DIR)/out/lab1_7
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_8.c -o $(TOP_DIR)/out/lab1_8
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_9.c -o $(TOP_DIR)/out/lab1_9
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_10.c -o $(TOP_DIR)/out/lab1_10
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab1/lab1_11.c -o $(TOP_DIR)/out/lab1_11
 
 lab2:
 	mkdir -p $(TOP_DIR)/out
