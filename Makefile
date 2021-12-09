@@ -71,9 +71,13 @@ lab5:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_4.c -o $(TOP_DIR)/out/lab5_4
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_5.c -o $(TOP_DIR)/out/lab5_5
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_6.c -o $(TOP_DIR)/out/lab5_6
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_6client.c -o $(TOP_DIR)/out/lab5_6client
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_7.c -o $(TOP_DIR)/out/lab5_7
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_7client.c -o $(TOP_DIR)/out/lab5_7client
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_8.c -o $(TOP_DIR)/out/lab5_8
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_9.c -o $(TOP_DIR)/out/lab5_9
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_9client.c -o $(TOP_DIR)/out/lab5_9client
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_10.c -o $(TOP_DIR)/out/lab5_10
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_10client.c -o $(TOP_DIR)/out/lab5_10client
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_11.c -o $(TOP_DIR)/out/lab5_11
 

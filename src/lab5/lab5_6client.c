@@ -1,5 +1,6 @@
 #include "logerr.h"
 #include "srvfunc.h"
+#include "str2int.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,34 +10,37 @@
 
 int main(int argc, char *argv[])
 {
-    key_t key = ftok(__FILE__, 'A');
-    if (key == -1) {
-        LOG_ERR("failed to get identifier");
-        exit(errno);
+    int serverid;
+    int err = 0;
+    err = str2int(argv[1], &serverid);
+    if (err) {
+        LOG_ERR("bad serverid specified");
+        exit(1);
     }
-    int msgqid = msgget(key, IPC_CREAT | 0660);
+
+    int msgqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
     if (msgqid == -1) {
         LOG_ERR("failed to get queue id");
         exit(errno);
     }
 
     printf(">>>> msgqid is %d <<<<\n", msgqid);
-    printf(">>>> Server started! <<<<\n");
+    printf(">>>> Client started! <<<<\n");
     for (;;) {
+        if (sendmsg("Client asks", serverid, msgqid, 0)) {
+            LOG_ERR("sendmsg failed");
+            exit(1);
+        }
         char *buf = readmsg(msgqid, 0);
         if (!buf) {
             LOG_ERR("readmsg failed");
             exit(1);
         }
 
-        int answerid = ((struct servermsg *)buf)->msgqid;
-        if (sendmsg("server answers", answerid, msgqid, 0)) {
-            LOG_ERR("sendmsg failed");
-            exit(1);
-        }
-        printf("Answered to %d\n", answerid);
+        printf("Server send: '%s'\n", ((struct servermsg *)buf)->mtext);
+
         free(buf);
-        // sleep(1);
+        sleep(1);
     }
     return 0;
 }
