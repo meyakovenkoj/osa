@@ -2,6 +2,7 @@
 #include "readstring.h"
 #include "srvfunc.h"
 #include "str2int.h"
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
