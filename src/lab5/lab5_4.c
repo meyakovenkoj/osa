@@ -38,6 +38,7 @@ int main(int argc, char *argv[])
     char *buf = calloc(4 + MAX_SZ, sizeof(char));
     int buflen = MAX_SZ;
     int rcv_res = msgrcv(msgqid, buf, buflen, type, IPC_NOWAIT | MSG_NOERROR);
+    // have a look at MSG_EXCEPT
     if (rcv_res == -1) {
         LOG_ERR("msgrcv error");
         exit(errno);

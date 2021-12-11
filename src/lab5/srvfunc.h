@@ -8,6 +8,15 @@
 #include <sys/msg.h>
 #include <time.h>
 
+/*
+ * The Requirement for message type:
+ * Example structure describing a message whose address is to be passed as
+ * the second argument to the functions msgrcv() and msgsnd().  The only
+ * actual hard requirement is that the first field be of type long, and
+ * contain the message type.  The user is encouraged to define their own
+ * application specific structure; this definition is included solely for
+ * backward compatability with existing source code.
+ */
 struct servermsg
 {
     long mtype;    /* message type (+ve integer) */
@@ -17,24 +26,24 @@ struct servermsg
 
 char *readmsg(int msgqid, long type)
 {
-    char *buf = (char *)calloc(4 + 1, sizeof(char));
+    int buflen = 10;
+    char *buf = (char *)calloc(sizeof(long) + buflen, sizeof(char));
     if (!buf) {
         LOG_ERR("Not enough memory");
         return NULL;
     }
-    int buflen = 1;
     for (;;) {
         int rcv_res = msgrcv(msgqid, buf, buflen, type, 0);
         if (rcv_res > -1) {
             break;
         }
         if (errno == E2BIG) {
-            buflen += 10;
-            buf = (char *)realloc(buf, 4 + buflen);
+            buf = (char *)realloc(buf, sizeof(long) + buflen);
             if (!buf) {
                 LOG_ERR("Not enough memory");
                 return NULL;
             }
+            buflen += 10;
         } else {
             LOG_ERR("msgrcv error");
             return NULL;
@@ -51,7 +60,7 @@ int sendmsg(char *msg, int msgqid, int senderid, long type)
     }
     int err = 0;
     int buflen = sizeof(senderid) + strlen(msg) + 1;
-    char *buf = (char *)calloc(4 + buflen, sizeof(char));
+    char *buf = (char *)calloc(sizeof(long) + buflen, sizeof(char));
     if (!buf) {
         LOG_ERR("Not enough memory");
         return -1;

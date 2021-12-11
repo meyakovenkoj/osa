@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
 
-        if (sendmsg("server answers", answerid, requestid, 0)) {
+        if (sendmsg("server answers", answerid, requestid, 1)) {
             LOG_ERR("sendmsg failed");
             exit(EXIT_FAILURE);
         }

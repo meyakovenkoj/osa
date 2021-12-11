@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     printf(">>>> msgqid is %d <<<<\n", msgqid);
     printf(">>>> Client started! <<<<\n");
     for (;;) {
-        if (sendmsg("Client asks", serverid, msgqid, 0)) {
+        if (sendmsg("Client asks", serverid, msgqid, 1)) {
             LOG_ERR("sendmsg failed");
             exit(EXIT_FAILURE);
         }

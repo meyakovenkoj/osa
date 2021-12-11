@@ -2,9 +2,10 @@
 #define STR2INT_H
 #include <limits.h>
 
-/*! \brief Function for conversation of string to positive integer.
+/*! \brief Function for conversation of string to integer.
     \param str pointer to string
-    \return Positive int or -1 on error
+    \param result value of result number, no changes on error
+    \return 0 on success or -1 on error all errors
 */
 int str2int(const char *str, int *result)
 {

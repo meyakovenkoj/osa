@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     char *buf = calloc(4 + 1, sizeof(char));
     int buflen = 1;
     for (;;) {
-        int rcv_res = msgrcv(msgqid, buf, buflen, type, 0);
+        int rcv_res = msgrcv(msgqid, (void *)buf, buflen, type, 0);
         if (rcv_res > -1) {
             break;
         }

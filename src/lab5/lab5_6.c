@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         }
 
         int answerid = ((struct servermsg *)buf)->msgqid;
-        if (sendmsg("server answers", answerid, msgqid, 0)) {
+        if (sendmsg("server answers", answerid, msgqid, 1)) {
             LOG_ERR("sendmsg failed");
             exit(EXIT_FAILURE);
         }

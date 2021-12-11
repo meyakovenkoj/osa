@@ -9,9 +9,27 @@
 #include <sys/msg.h>
 #include <time.h>
 
+int msgqid = -1;
+
+void action(int sig)
+{
+    int res_cnlt = msgctl(msgqid, IPC_RMID, 0);
+    if (res_cnlt == -1) {
+        write(STDOUT_FILENO, "removing of queue failed\n", sizeof("removing of queue failed\n"));
+    } else {
+        write(STDOUT_FILENO, "queue removed\n", sizeof("queue removed\n"));
+    }
+}
+
 int main()
 {
-    int msgqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
+    struct sigaction act;
+    act.sa_handler = action;
+    sigemptyset(&act.sa_mask);
+    act.sa_flags = 0; // set default after execute
+
+    sigaction(SIGINT, &act, 0);
+    msgqid = msgget(IPC_PRIVATE, IPC_CREAT | 0660);
     if (msgqid == -1) {
         LOG_ERR("failed to get queue id");
         exit(errno);

@@ -22,5 +22,10 @@ int main(int argc, char *argv[])
         LOG_ERR("removing of queue failed");
         exit(EXIT_FAILURE);
     }
+
+    if (errno == EPERM) {
+        LOG_ERR("don't have permissions");
+        exit(EXIT_FAILURE);
+    }
     return 0;
 }
