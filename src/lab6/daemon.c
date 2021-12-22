@@ -132,12 +132,10 @@ int Daemon(void)
 
     int socket_fd;
 
-    char *namlog;
     signal(SIGHUP, sig_hup);
     signal(SIGTERM, sig_term);
 
     struct sockaddr_in name;
-    namlog = (char *)malloc(25);
     socket_fd = socket(AF_INET, SOCK_DGRAM, 0);
     name.sin_family = AF_INET;
     name.sin_addr.s_addr = INADDR_ANY;
