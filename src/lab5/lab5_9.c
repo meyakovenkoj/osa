@@ -35,14 +35,14 @@ int main(int argc, char *argv[])
     printf(">>>> Server answer id is %d <<<<\n", answerid);
     printf(">>>> Server started! <<<<\n");
     for (;;) {
-        char *buf = readmsg(requestid, 0);
+        char *buf = treadmsg(requestid, 0);
         if (!buf) {
-            LOG_ERR("readmsg failed");
+            LOG_ERR("treadmsg failed");
             exit(EXIT_FAILURE);
         }
 
-        if (sendmsg("server answers", answerid, requestid, 1)) {
-            LOG_ERR("sendmsg failed");
+        if (tsendmsg("server answers", answerid, requestid, 1)) {
+            LOG_ERR("tsendmsg failed");
             exit(EXIT_FAILURE);
         }
         printf("Answered to %d\n", answerid);

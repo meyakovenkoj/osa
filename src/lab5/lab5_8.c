@@ -46,16 +46,16 @@ int main(int argc, char *argv[])
     printf(">>>> msgqid is %d <<<<\n", msgqid);
     printf(">>>> Server started! <<<<\n");
     for (;;) {
-        char *buf = readmsg(msgqid, 0);
+        char *buf = treadmsg(msgqid, 0);
         if (!buf) {
-            LOG_ERR("readmsg failed");
+            LOG_ERR("treadmsg failed");
             exit(EXIT_FAILURE);
         }
 
         int answerid = ((struct servermsg *)buf)->msgqid;
         long type = ((struct servermsg *)buf)->mtype;
-        if (sendmsg(((struct servermsg *)buf)->mtext, answerid, msgqid, type)) {
-            LOG_ERR("sendmsg failed");
+        if (tsendmsg(((struct servermsg *)buf)->mtext, answerid, msgqid, type)) {
+            LOG_ERR("tsendmsg failed");
             exit(EXIT_FAILURE);
         }
         printf("Answered to %d\n", answerid);

@@ -42,16 +42,16 @@ int main()
     }
     case 0: {
         for (;;) {
-            char *buf = readmsg(msgqid, 1);
+            char *buf = treadmsg(msgqid, 1);
             if (!buf) {
-                LOG_ERR("readmsg failed");
+                LOG_ERR("treadmsg failed");
                 exit(EXIT_FAILURE);
             }
 
             write(STDOUT_FILENO, "0", sizeof("0"));
 
-            if (sendmsg("child", msgqid, msgqid, 2)) {
-                LOG_ERR("sendmsg failed");
+            if (tsendmsg("child", msgqid, msgqid, 2)) {
+                LOG_ERR("tsendmsg failed");
                 exit(EXIT_FAILURE);
             }
             free(buf);
@@ -61,17 +61,17 @@ int main()
     }
     default: {
         for (;;) {
-            if (sendmsg("parent", msgqid, msgqid, 1)) {
-                LOG_ERR("sendmsg failed");
+            if (tsendmsg("parent", msgqid, msgqid, 1)) {
+                LOG_ERR("tsendmsg failed");
                 exit(EXIT_FAILURE);
             }
             sleep(1);
 
             write(STDOUT_FILENO, "1", sizeof("1"));
 
-            char *buf = readmsg(msgqid, 2);
+            char *buf = treadmsg(msgqid, 2);
             if (!buf) {
-                LOG_ERR("readmsg failed");
+                LOG_ERR("treadmsg failed");
                 exit(EXIT_FAILURE);
             }
             free(buf);

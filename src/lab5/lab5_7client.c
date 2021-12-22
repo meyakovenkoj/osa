@@ -92,13 +92,13 @@ int main(int argc, char *argv[])
             LOG_ERR("readline failed");
             exit(EXIT_FAILURE);
         }
-        if (sendmsg(text, serverid, rmsgqid, stype)) {
-            LOG_ERR("sendmsg failed");
+        if (tsendmsg(text, serverid, rmsgqid, stype)) {
+            LOG_ERR("tsendmsg failed");
             exit(EXIT_FAILURE);
         }
-        char *buf = readmsg(msgqid, rtype);
+        char *buf = treadmsg(msgqid, rtype);
         if (!buf) {
-            LOG_ERR("readmsg failed");
+            LOG_ERR("treadmsg failed");
             exit(EXIT_FAILURE);
         }
 

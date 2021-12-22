@@ -28,13 +28,13 @@ int main(int argc, char *argv[])
     printf(">>>> answerid is %d <<<<\n", answerid);
     printf(">>>> Client started! <<<<\n");
     for (;;) {
-        if (sendmsg("Client asks", requestid, answerid, 1)) {
-            LOG_ERR("sendmsg failed");
+        if (tsendmsg("Client asks", requestid, answerid, 1)) {
+            LOG_ERR("tsendmsg failed");
             exit(EXIT_FAILURE);
         }
-        char *buf = readmsg(answerid, 0);
+        char *buf = treadmsg(answerid, 0);
         if (!buf) {
-            LOG_ERR("readmsg failed");
+            LOG_ERR("treadmsg failed");
             exit(EXIT_FAILURE);
         }
 

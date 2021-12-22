@@ -24,7 +24,7 @@ struct servermsg
     char mtext[1]; /* message body */
 };
 
-char *readmsg(int msgqid, long type)
+char *treadmsg(int msgqid, long type)
 {
     int buflen = 10;
     char *buf = (char *)calloc(sizeof(long) + buflen, sizeof(char));
@@ -52,7 +52,17 @@ char *readmsg(int msgqid, long type)
     return buf;
 }
 
-int sendmsg(char *msg, int msgqid, int senderid, long type)
+char *textmsg(int msgqid, long type)
+{
+    char *tmp = treadmsg(msgqid, type);
+    struct servermsg *mesg = (struct servermsg *)tmp;
+    char *res = malloc(strlen(mesg->mtext) + 1);
+    strcpy(res, mesg->mtext);
+    free(tmp);
+    return res;
+}
+
+int tsendmsg(char *msg, int msgqid, int senderid, long type)
 {
     if (!msg) {
         errno = EINVAL;
