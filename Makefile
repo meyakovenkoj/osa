@@ -91,3 +91,7 @@ lab5:
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_10client.c -o $(TOP_DIR)/out/lab5_10client
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_11.c -o $(TOP_DIR)/out/lab5_11
 
+lab6:
+	mkdir -p $(TOP_DIR)/out
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab6/daemon.c -o $(TOP_DIR)/out/daemon
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab6/client.c -o $(TOP_DIR)/out/client
