@@ -5,6 +5,9 @@ socklen_t size = sizeof(client_name);
 int socket_fd = -1;
 int msgqid = -1;
 int logfd = -1;
+pid_t pid1 = -1;
+pid_t pid2 = -1;
+pid_t pid3 = -1;
 
 configSet daemonSet = {0};
 
@@ -148,6 +151,7 @@ int Daemon(void)
 {
     signal(SIGHUP, sig_hup);
     signal(SIGTERM, sig_term);
+    signal(SIGINT, sig_term);
     signal(SIGCHLD, sig_child);
 
     parseConfig();
@@ -167,16 +171,10 @@ int Daemon(void)
         FD_LOG(getTime(), sockbuff, logfd);
         pid_t pid;
         char result[MAXLINE] = {0};
-        for (char *ptr = strtok(sockbuff, " "); ptr; ptr = strtok(NULL, " ")) {
-            int number;
-            int errm = str2int(ptr, &number);
-            if (errm) {
-                FD_ERR("INVAILID DATA", logfd);
-                continue;
-            }
-            if ((pid = fork()) < 0)
-                ;
-            if (pid == 0) {
+        if ((pid = fork()) < 0)
+            ;
+        if (pid == 0) {
+            for (;;) {
                 char *buf = textmsg(msgqid, 1);
                 if (!buf) {
                     FD_ERR("treadmsg failed", logfd);
@@ -205,19 +203,15 @@ int Daemon(void)
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG(getTime(), "sent from proc 1", logfd);
-                exit(0);
             }
-            if (pid) {
-                if (tsendmsg(ptr, msgqid, msgqid, 1)) {
-                    FD_ERR("tsendmsg failed", logfd);
-                    exit(EXIT_FAILURE);
-                }
-                FD_LOG(getTime(), "sent from server 1", logfd);
-            }
-
-            if ((pid = fork()) < 0)
-                ;
-            if (pid == 0) {
+            exit(0);
+        } else {
+            pid1 = pid;
+        }
+        if ((pid = fork()) < 0)
+            ;
+        if (pid == 0) {
+            for (;;) {
                 char *buf2 = textmsg(msgqid, 2);
                 if (!buf2) {
                     FD_ERR("treadmsg failed", logfd);
@@ -235,19 +229,15 @@ int Daemon(void)
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG(getTime(), "sent from proc 2", logfd);
-                exit(0);
             }
-            if (pid) {
-                if (tsendmsg(ptr, msgqid, msgqid, 2)) {
-                    FD_ERR("tsendmsg failed", logfd);
-                    exit(EXIT_FAILURE);
-                }
-                FD_LOG(getTime(), "sent from server 2", logfd);
-            }
-
-            if ((pid = fork()) < 0)
-                ;
-            if (pid == 0) {
+            exit(0);
+        } else {
+            pid2 = pid;
+        }
+        if ((pid = fork()) < 0)
+            ;
+        if (pid == 0) {
+            for (;;) {
                 char *buf = textmsg(msgqid, 4);
                 if (!buf) {
                     FD_ERR("treadmsg failed", logfd);
@@ -265,25 +255,49 @@ int Daemon(void)
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG(getTime(), "sent from proc 3", logfd);
-                exit(0);
             }
-            if (pid) {
-                char *buf = textmsg(msgqid, 5);
-                if (!buf) {
-                    FD_ERR("treadmsg failed", logfd);
-                    exit(EXIT_FAILURE);
-                }
-                printf("GET: %s\n", buf);
-                strcat(result, buf);
-                strcat(result, " ");
-                sleep(2);
-                FD_LOG(getTime(), "got from proc 3", logfd);
+            exit(0);
+        } else {
+            pid3 = pid;
+        }
+        for (char *ptr = strtok(sockbuff, " "); ptr; ptr = strtok(NULL, " ")) {
+            int number;
+            int errm = str2int(ptr, &number);
+            if (errm) {
+                FD_ERR("INVAILID DATA", logfd);
+                continue;
             }
+
+            if (tsendmsg(ptr, msgqid, msgqid, 1)) {
+                FD_ERR("tsendmsg failed", logfd);
+                exit(EXIT_FAILURE);
+            }
+            FD_LOG(getTime(), "sent from server 1", logfd);
+
+            if (tsendmsg(ptr, msgqid, msgqid, 2)) {
+                FD_ERR("tsendmsg failed", logfd);
+                exit(EXIT_FAILURE);
+            }
+            FD_LOG(getTime(), "sent from server 2", logfd);
+
+            char *buf = textmsg(msgqid, 5);
+            if (!buf) {
+                FD_ERR("treadmsg failed", logfd);
+                exit(EXIT_FAILURE);
+            }
+            printf("GET: %s\n", buf);
+            strcat(result, buf);
+            strcat(result, " ");
+            sleep(2);
+            FD_LOG(getTime(), "got from proc 3", logfd);
         }
         FD_LOG(getTime(), "send answer", logfd);
         sendto(socket_fd, result, strlen(result),
                0, (const struct sockaddr *)&client_name,
                len);
+        kill(pid1, 9);
+        kill(pid2, 9);
+        kill(pid3, 9);
     }
 }
 
@@ -291,8 +305,15 @@ void sig_child(int sig)
 {
     pid_t pid;
     int stat;
-    while ((pid = waitpid(-1, &stat, WNOHANG)) > 0)
-        ;
+    while ((pid = waitpid(-1, &stat, WNOHANG)) > 0) {
+        if (pid == pid1) {
+            pid1 = -1;
+        } else if (pid == pid2) {
+            pid2 = -1;
+        } else if (pid == pid3) {
+            pid3 = -1;
+        }
+    }
     return;
 }
 
@@ -306,9 +327,15 @@ void sig_hup(int sig)
 
 void sig_term(int sig)
 {
-    signal(SIGCHLD, SIG_IGN);
-    signal(SIGTERM, SIG_IGN);
-    killpg(0, SIGTERM);
+    if (pid1 != -1) {
+        kill(pid1, 9);
+    }
+    if (pid2 != -1) {
+        kill(pid2, 9);
+    }
+    if (pid3 != -1) {
+        kill(pid3, 9);
+    }
     cleanUp();
     exit(EXIT_SUCCESS);
 }
