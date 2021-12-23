@@ -13,24 +13,9 @@ configSet daemonSet = {0};
 
 char sockbuff[MAXLINE];
 
-char *getTime()
-{
-    char *ret;
-    time_t now;
-    struct tm *ptr;
-    char tbuf[80];
-    ret = (char *)malloc(100);
-    memset(ret, 0, 100);
-    time(&now);
-    ptr = localtime(&now);
-    strftime(tbuf, 80, "%Y-%B-%e %H:%M:%S", ptr);
-    ret = tbuf;
-    return (ret);
-}
-
 void cleanUp()
 {
-    FD_LOG(getTime(), "clean up processing...", logfd);
+    FD_LOG("clean up processing...", logfd);
     if (socket_fd != -1) {
         close(socket_fd);
     }
@@ -40,8 +25,10 @@ void cleanUp()
             FD_ERR("removing of queue failed", logfd);
         }
     }
-    FD_LOG(getTime(), "clean up done", logfd);
-    close(logfd);
+    FD_LOG("clean up done", logfd);
+    if (logfd != -1) {
+        close(logfd);
+    }
 }
 
 void updateConfig(enum upd needUpdate, int port, char *logfile)
@@ -167,8 +154,8 @@ int Daemon(void)
                      &len);
 
         sockbuff[n] = '\0';
-        FD_LOG(getTime(), "recieved message from client", logfd);
-        FD_LOG(getTime(), sockbuff, logfd);
+        FD_LOG("recieved message from client", logfd);
+        FD_LOG(sockbuff, logfd);
         pid_t pid;
         char result[MAXLINE] = {0};
         if ((pid = fork()) < 0)
@@ -183,9 +170,10 @@ int Daemon(void)
                 }
                 int n;
                 str2int(buf, &n);
+                free(buf);
                 n = n - 1;
                 usleep(1000 * (rand() % 101 + 1));
-                FD_LOG(getTime(), "got from server 1", logfd);
+                FD_LOG("got from server 1", logfd);
                 char *buf2 = textmsg(msgqid, 3);
                 if (!buf2) {
                     FD_ERR("treadmsg failed", logfd);
@@ -193,16 +181,17 @@ int Daemon(void)
                 }
                 int n2;
                 str2int(buf2, &n2);
+                free(buf2);
                 n = n + n2;
                 usleep(1000 * (rand() % 101 + 1));
-                FD_LOG(getTime(), "got from proc 2", logfd);
+                FD_LOG("got from proc 2", logfd);
                 char buf3[100] = {0};
                 sprintf(buf3, "%d", n);
                 if (tsendmsg(buf3, msgqid, msgqid, 4)) {
                     FD_ERR("tsendmsg failed", logfd);
                     exit(EXIT_FAILURE);
                 }
-                FD_LOG(getTime(), "sent from proc 1", logfd);
+                FD_LOG("sent from proc 1", logfd);
             }
             exit(0);
         } else {
@@ -219,16 +208,17 @@ int Daemon(void)
                 }
                 int n2;
                 str2int(buf2, &n2);
+                free(buf2);
                 n2 = n2 << 1;
                 usleep(1000 * (rand() % 101 + 1));
                 char buf4[100] = {0};
                 sprintf(buf4, "%d", n2);
-                FD_LOG(getTime(), "got from server 2", logfd);
+                FD_LOG("got from server 2", logfd);
                 if (tsendmsg(buf4, msgqid, msgqid, 3)) {
                     FD_ERR("tsendmsg failed", logfd);
                     exit(EXIT_FAILURE);
                 }
-                FD_LOG(getTime(), "sent from proc 2", logfd);
+                FD_LOG("sent from proc 2", logfd);
             }
             exit(0);
         } else {
@@ -245,16 +235,17 @@ int Daemon(void)
                 }
                 int n2;
                 str2int(buf, &n2);
+                free(buf);
                 n2 = n2 << 1;
                 usleep(1000 * (rand() % 101 + 1));
                 char buf4[100] = {0};
                 sprintf(buf4, "%d", n2);
-                FD_LOG(getTime(), "got from proc 1", logfd);
+                FD_LOG("got from proc 1", logfd);
                 if (tsendmsg(buf4, msgqid, msgqid, 5)) {
                     FD_ERR("tsendmsg failed", logfd);
                     exit(EXIT_FAILURE);
                 }
-                FD_LOG(getTime(), "sent from proc 3", logfd);
+                FD_LOG("sent from proc 3", logfd);
             }
             exit(0);
         } else {
@@ -272,13 +263,13 @@ int Daemon(void)
                 FD_ERR("tsendmsg failed", logfd);
                 exit(EXIT_FAILURE);
             }
-            FD_LOG(getTime(), "sent from server 1", logfd);
+            FD_LOG("sent from server 1", logfd);
 
             if (tsendmsg(ptr, msgqid, msgqid, 2)) {
                 FD_ERR("tsendmsg failed", logfd);
                 exit(EXIT_FAILURE);
             }
-            FD_LOG(getTime(), "sent from server 2", logfd);
+            FD_LOG("sent from server 2", logfd);
 
             char *buf = textmsg(msgqid, 5);
             if (!buf) {
@@ -288,10 +279,10 @@ int Daemon(void)
             printf("GET: %s\n", buf);
             strcat(result, buf);
             strcat(result, " ");
-            sleep(2);
-            FD_LOG(getTime(), "got from proc 3", logfd);
+            FD_LOG("got from proc 3", logfd);
+            free(buf);
         }
-        FD_LOG(getTime(), "send answer", logfd);
+        FD_LOG("send answer", logfd);
         sendto(socket_fd, result, strlen(result),
                0, (const struct sockaddr *)&client_name,
                len);
@@ -319,9 +310,9 @@ void sig_child(int sig)
 
 void sig_hup(int sig)
 {
-    FD_LOG(getTime(), "recieved config update", logfd);
+    FD_LOG("recieved config update", logfd);
     parseConfig();
-    FD_LOG(getTime(), "config update done", logfd);
+    FD_LOG("config update done", logfd);
     return;
 }
 
