@@ -75,6 +75,7 @@ lab4:
 
 lab5:
 	mkdir -p $(TOP_DIR)/out
+	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_0.c -o $(TOP_DIR)/out/lab5_0
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_1.c -o $(TOP_DIR)/out/lab5_1
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_2.c -o $(TOP_DIR)/out/lab5_2
 	$(CC) $(CFLAGS) $(LDFLAGS) $(SRC_DIR)/lab5/lab5_3.c -o $(TOP_DIR)/out/lab5_3

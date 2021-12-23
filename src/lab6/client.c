@@ -9,10 +9,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-// #define PORT 6823
 #define MAXLINE 1024
 
-// Driver code
 int main(int argc, char *argv[])
 {
     int sockfd;
@@ -35,7 +33,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // Creating socket file descriptor
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
         LOG_ERR("socket creation failed");
         exit(EXIT_FAILURE);
@@ -43,7 +40,6 @@ int main(int argc, char *argv[])
 
     memset(&servaddr, 0, sizeof(servaddr));
 
-    // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(port);
     servaddr.sin_addr.s_addr = INADDR_ANY;
@@ -66,9 +62,19 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    sendto(sockfd, (const char *)hello, strlen(hello),
-           0, (const struct sockaddr *)&servaddr,
-           sizeof(servaddr));
+    int err = sendto(sockfd, (const char *)hello, strlen(hello),
+                     0, (const struct sockaddr *)&servaddr,
+                     sizeof(servaddr));
+    if (err == -1) {
+        LOG_ERR("send failed");
+        exit(EXIT_FAILURE);
+    }
+
+    if (err != strlen(hello)) {
+        LOG_ERR("transmission failed");
+        exit(EXIT_FAILURE);
+    }
+
     printf("Hello message sent.\n");
 
     n = recvfrom(sockfd, (char *)buffer, MAXLINE,
