@@ -183,6 +183,7 @@ int Daemon(void)
                 char *buf2 = textmsg(msgqid, 3);
                 if (!buf2) {
                     FD_ERR("treadmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 int n2;
@@ -195,6 +196,7 @@ int Daemon(void)
                 sprintf(buf3, "%d", n);
                 if (tsendmsg(buf3, msgqid, msgqid, 4)) {
                     FD_ERR("tsendmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG("sent from proc 1", logfd);
@@ -210,6 +212,7 @@ int Daemon(void)
                 char *buf2 = textmsg(msgqid, 2);
                 if (!buf2) {
                     FD_ERR("treadmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 int n2;
@@ -222,6 +225,7 @@ int Daemon(void)
                 FD_LOG("got from server 2", logfd);
                 if (tsendmsg(buf4, msgqid, msgqid, 3)) {
                     FD_ERR("tsendmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG("sent from proc 2", logfd);
@@ -237,6 +241,7 @@ int Daemon(void)
                 char *buf = textmsg(msgqid, 4);
                 if (!buf) {
                     FD_ERR("treadmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 int n2;
@@ -249,6 +254,7 @@ int Daemon(void)
                 FD_LOG("got from proc 1", logfd);
                 if (tsendmsg(buf4, msgqid, msgqid, 5)) {
                     FD_ERR("tsendmsg failed", logfd);
+                    cleanUp();
                     exit(EXIT_FAILURE);
                 }
                 FD_LOG("sent from proc 3", logfd);
@@ -264,15 +270,17 @@ int Daemon(void)
                 FD_ERR("INVAILID DATA", logfd);
                 continue;
             }
-
+            FD_LOG(ptr, logfd);
             if (tsendmsg(ptr, msgqid, msgqid, 1)) {
                 FD_ERR("tsendmsg failed", logfd);
+                cleanUp();
                 exit(EXIT_FAILURE);
             }
             FD_LOG("sent from server 1", logfd);
 
             if (tsendmsg(ptr, msgqid, msgqid, 2)) {
                 FD_ERR("tsendmsg failed", logfd);
+                cleanUp();
                 exit(EXIT_FAILURE);
             }
             FD_LOG("sent from server 2", logfd);
@@ -282,13 +290,15 @@ int Daemon(void)
                 FD_ERR("treadmsg failed", logfd);
                 exit(EXIT_FAILURE);
             }
-            printf("GET: %s\n", buf);
+            FD_LOG("Get result:", logfd);
+            FD_LOG(buf, logfd);
             strcat(result, buf);
             strcat(result, " ");
             FD_LOG("got from proc 3", logfd);
             free(buf);
         }
         FD_LOG("send answer", logfd);
+        FD_LOG(result, logfd);
         sendto(socket_fd, result, strlen(result),
                0, (const struct sockaddr *)&client_name,
                len);

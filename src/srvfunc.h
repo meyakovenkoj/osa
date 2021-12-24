@@ -36,7 +36,7 @@ char *treadmsg(int msgqid, long type)
         errno = 0;
         int rcv_res = msgrcv(msgqid, buf, buflen, type, IPC_NOWAIT);
         if (rcv_res > -1) {
-            LOG_ERR("return from msrcv");
+        //     LOG_ERR("return from msrcv");
             break;
         }
         if (errno == E2BIG) {
@@ -60,7 +60,7 @@ char *textmsg(int msgqid, long type)
 {
     char *tmp = treadmsg(msgqid, type);
     struct servermsg *mesg = (struct servermsg *)tmp;
-    printf("type:%ld text:%s\n", mesg->mtype, mesg->mtext);
+//     printf("type:%ld text:%s\n", mesg->mtype, mesg->mtext);
     char *res = malloc(strlen(mesg->mtext) + 1);
     strcpy(res, mesg->mtext);
     free(tmp);
