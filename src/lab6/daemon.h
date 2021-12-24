@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 #define MAXLINE 1024
-#define CONFIG_NAME "/Users/ivanyakovenko/Documents/osa/src/lab6/daemon.config"
+#define CONFIG_NAME "src/lab6/daemon.config"
 
 typedef struct configSet
 {
@@ -43,6 +43,6 @@ int Daemon(void);
 char *getTime();
 void cleanUp();
 int parseConfig();
-void updateConfig(enum upd needUpdate, int port, char *logfile);
+int updateConfig(enum upd needUpdate, int port, char *logfile);
 
 #endif // DAEMON_H

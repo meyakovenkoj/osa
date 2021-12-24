@@ -31,7 +31,7 @@ void cleanUp()
     }
 }
 
-void updateConfig(enum upd needUpdate, int port, char *logfile)
+int updateConfig(enum upd needUpdate, int port, char *logfile)
 {
     if (needUpdate == UPD_PORT || needUpdate == UPD_BOTH) {
         if (socket_fd != -1) {
@@ -44,7 +44,7 @@ void updateConfig(enum upd needUpdate, int port, char *logfile)
         name.sin_port = htons(port);
         if (bind(socket_fd, (const struct sockaddr *)&name, sizeof(name)) == -1) {
             LOG_ERR("bind error");
-            exit(errno);
+            return 1;
         }
         listen(socket_fd, 20);
         daemonSet.port = port;
@@ -55,6 +55,7 @@ void updateConfig(enum upd needUpdate, int port, char *logfile)
             int res_cnlt = msgctl(msgqid, IPC_RMID, 0);
             if (res_cnlt == -1) {
                 LOG_ERR("removing of queue failed");
+                return 1;
             }
         }
         close(logfd);
@@ -64,21 +65,22 @@ void updateConfig(enum upd needUpdate, int port, char *logfile)
         logfd = open(daemonSet.logfile, O_WRONLY | O_APPEND, 0644);
         if (logfd == -1) {
             LOG_ERR("Invailid logfile");
-            exit(EXIT_FAILURE);
+            return 1;
         }
         key_t key = ftok(logfile, 'A');
         if (key == -1) {
             LOG_ERR("failed to get identifier");
-            exit(errno);
+            return 1;
         }
         msgqid = msgget(key, IPC_CREAT | IPC_EXCL | 0660);
         // msgqid = msgget(key, IPC_CREAT | 0660);
         if (msgqid == -1) {
             LOG_ERR("failed to get queue id");
-            exit(errno);
+            return 1;
         }
         printf("<<<<<< msgqid = %d >>>>>>\n", msgqid);
     }
+    return 0;
 }
 
 int parseConfig()
@@ -103,6 +105,7 @@ int parseConfig()
     int err = str2int(buf, &port);
     if (err) {
         LOG_ERR("port parse fail");
+        return 1;
     }
     memset(buf, 0, 100);
     if (fscanf(fp, "logfile = %s", buf) != 1) {
@@ -120,7 +123,7 @@ int parseConfig()
         return 1;
     }
     strcpy(logfile, buf);
-
+    err = 0;
     int needUpdate = NO_UPD;
     if (daemonSet.port != port) {
         needUpdate += UPD_PORT;
@@ -129,9 +132,9 @@ int parseConfig()
         needUpdate += UPD_LOGFILE;
     }
     if (needUpdate) {
-        updateConfig(needUpdate, port, logfile);
+        err = updateConfig(needUpdate, port, logfile);
     }
-    return 0;
+    return err;
 }
 
 int Daemon(void)
@@ -141,7 +144,10 @@ int Daemon(void)
     signal(SIGINT, sig_term);
     signal(SIGCHLD, sig_child);
 
-    parseConfig();
+    if (parseConfig()) {
+        LOG_ERR("failed to load config");
+        exit(EXIT_FAILURE);
+    }
 
     for (;;) {
         socklen_t len;
