@@ -6,7 +6,7 @@ CFLAGS := -g -std=gnu99 -O0 -Wall -Werror -Wpedantic -Wno-deprecated-declaration
 LDFLAGS := -I$(SRC_DIR)/
 CC := gcc
 
-all: clean lab1 lab2 lab3 lab4 lab5
+all: clean lab1 lab2 lab3 lab4 lab5 lab6
 	echo "All done"
 
 clean:
